@@ -1,0 +1,142 @@
+<div class="font-weight-bold text-center mt-5">
+    <h1>Project Details</h1>
+</div>
+<div class="row mt-5 h-100 border border-2 border-dark">
+
+    <!--  Displaying Project Details Like name,author,description,total issues -->
+
+    <div class="col col-12 col-md-6 my-3">
+        <div class="card" style="border: none;">
+            <div class="card-body">
+                <h2 class="card-title text-center text-primary"><%= project.name %></h2>
+                <div style="font-size: 20px;" class="py-2">
+                    <p class="card-text text-align: justify; font-family: 'Times New Roman', Times, serif;"><%= project.description %></p>
+                    <p class="card-text text-dark d-flex justify-content-between">
+                        <strong>Author : <span class="text-primary"><%= project.author %></strong></span>
+                        <span><strong>Total Issues: <%= project.issues?.length %></strong></span>
+                    </p>
+                </div>
+                <div class="text-center my-2">
+                    <a  href="/createIssue/<%= project._id %>" class="btn btn-danger">Create New Issue</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--Form for filtering issues by labels,authors and search issues by title,description and displaying filtered issues-->
+
+    <div class="col col-xs-12 col-md-6">
+        <form action="/project-details/<%= project._id%>" method="post">
+            <div class="form-group my-4">
+                
+                <!-------------------------- FILTER BY LABELS ------------------------>
+                
+                <div class="d-flex justify-content-between my-2">
+                    <span style="font-weight:bold;font-size:20px">
+                        Filter (Labels): 
+                    </span>
+                    <span style="display: inline-block">
+                        <input name="filterLabels" class="form-check-input border border-dark" value="Bug" type="checkbox" id="bug">
+                        <label class="form-check-label" for="bug">
+                            Bug
+                        </label>
+                    </span>
+                    <span style="display: inline-block">
+                        <input name="filterLabels" class="form-check-input border border-dark" value="Type Error" type="checkbox" id="typeError">
+                        <label class="form-check-label" for="typeError">
+                            Type Error
+                        </label>
+                    </span>
+                    <span style="display: inline-block">
+                        <input name="filterLabels" class="form-check-input border border-dark" value="Syntax Error" type="checkbox" id="syntaxError">
+                        <label class="form-check-label" for="syntaxError">
+                            Syntax Error
+                        </label>
+                    </span>
+                    <span style="display: inline-block">
+                        <input name="filterLabels" class="form-check-input border border-dark" type="checkbox" value="Line Missing" id="lineMissing">
+                        <label class="form-check-label" for="lineMissing">
+                            Line Missing
+                        </label>
+                    </span>
+                    <span class="text-center mx-md-3">
+                        <button type="submit" class="btn btn-primary border border-2 border-dark">Filter</button>
+                    </span>
+                </div>
+
+                <!-------------------------- FILTER BY AUTHOR ------------------------>
+
+                <div class="d-flex justify-content-between my-2">
+                    <span style="font-weight:bold;font-size:20px">
+                        Filter (Author):  
+                    </span>
+                    <span class="input-group w-25 border border-2 border-dark">
+                        <select name="filterAuthor" id="inputState" class="form-control form-select">
+                            <option checked></option>
+                            <% 
+                                var uniqueAuthors = {}; 
+                                project.issues.forEach((issue) => {
+                                    var lowercaseAuthor = issue.author.toLowerCase(); 
+                                    uniqueAuthors[lowercaseAuthor] = true;
+                                }); 
+                                // Iterate over the unique author names and populate the options
+                                Object.keys(uniqueAuthors).forEach((author) => {
+                            %>
+                                <option><%= author %></option>
+                            <% }) %>
+                        </select>
+                    </span>
+                    <span class="text-center mx-md-3">
+                        <button type="submit" class="btn btn-primary border border-2 border-dark">Filter</button>
+                    </span>
+                </div>
+
+                <!-------------------------- SEARCH SECTION ------------------------>
+
+                <div class="d-flex justify-content-between my-2">
+                    <span style="font-weight:bold;font-size:20px">
+                        Search: 
+                    </span>
+                    <span class="input-group w-50">
+                        <div class="input-group">
+                            <input type="text" class="form-control border border-2 border-dark py-2" name="searchValue" placeholder="Search by Issue Title, Description">
+                        </div>
+                    </span>
+                    <span class="text-center mx-md-3">
+                        <button type="submit" class="btn btn-primary border border-2 border-dark">Search</button>
+                    </span>
+                </div>
+            </div>
+        </form>
+
+        <!-------------FILTER BY LABEL,AUTHOR AND SEARCH FORM ENDS----------->
+
+        <!-------------------------- DISPLAYING ISSUES ------------------------>
+
+        <% if(!issues || !issues.length) { %>
+            <div class="text-center my-3">
+                <h4>No Issues Found</h4>
+            </div>
+        <% } else {%>
+            <div class="text-center my-3">
+                <h2>Issues</h2>
+            </div>
+        <% } %>
+        <% issues?.forEach((issue)=>{ %>
+            <div class="card border border-dark my-2">
+                <div class="card-body">
+                    <h5 class="card-title">Title: <span class="text-primary"><%= issue.title %></span></h5>
+                    <div style="font-size: 16px; font-weight: bold;" class="py-2">
+                        <p class="card-text text-align: justify; font-family: 'Times New Roman', Times, serif;">Description: <%= issue.description %></p>
+                        <p class="card-text">
+                            Label: <%= issue.labels %>
+                        </p>
+                        <p class="card-text">Author: <%= issue.author %></p>
+                    </div>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+    </div>
+</div>

@@ -1,0 +1,30 @@
+<div class="row mt-5 h-100">
+    <div class="font-weight-bold text-center">
+        <h1>
+            <span>
+                <span class="font-weight-bold mx-3">Projects</span>
+                <a href="/createProject" class="btn border border-2 border-dark bg-info"><i class="fa-plus"></i></a>
+            </span>
+        </h1>
+    </div>
+    <% projects?.forEach((project)=>{ %>
+        <div class="col col-12 my-3">
+            <div class="card border-2 border-dark rounded-5">
+                <div class="card-body">
+                    <h2 class="card-title text-center text-primary"><%= project.name %></h2>
+                    <div style="font-size: 20px;" class="py-2">
+                        <p class="card-text text-align: justify; font-family: 'Times New Roman', Times, serif;"><%= project.description %></p>
+                        <p class="card-text text-dark d-flex justify-content-between">
+                            <strong>Author : <span class="text-primary"><%= project.author %></strong></span>
+                            <span class="d-flex justify-content-end">
+                                <span class="mx-md-2">Issues Tracked : <strong><%= project.issues?.length %></strong></span>
+                                <a  href="/project-details/<%= project._id %>" class="btn btn-primary mx-2">Project Details</a>
+                                <a  href="/createIssue/<%= project._id %>" class="btn btn-danger"  data-toggle="tooltip" data-placement="top" title="Create Project">Create an Issue</a>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <% }) %>
+</div>
